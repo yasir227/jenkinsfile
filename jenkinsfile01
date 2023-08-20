@@ -9,19 +9,19 @@ pipeline {
     }
  post {
         always {
-            sh 'Always'
+            echo 'Always'
         }
         changed {
-            sh 'Only if status changed from Success to Failure or vice versa w.r.t. last run.'
+            echo 'Only if status changed from Success to Failure or vice versa w.r.t. last run.'
         }
         success {
-            sh 'Only on SUCCESS'
+            echo 'Only on SUCCESS'
         }
         unstable {
-            sh 'Only if run is unstable'
+            echo 'Only if run is unstable'
         }
         failure {
-            sh 'only on Failure'
+            echo 'only on Failure'
         }
     }
 }
