@@ -11,17 +11,17 @@ pipeline {
         always {
             echo 'Always'
         }
+        changed {
+            echo 'Only if status changed from Success to Failure or vice versa w.r.t. last run.'
+        }
         success {
             echo 'Only on SUCCESS'
-        }
-        failure {
-            echo 'Only on Failure'
         }
         unstable {
             echo 'Only if run is unstable'
         }
-        changed {
-            echo 'Only if status changed from Success to Failure or vice versa w.r.t. last run.'
+        failure {
+            echo 'only on Failure'
         }
     }
 }
