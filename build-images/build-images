@@ -36,7 +36,7 @@ pipeline {
             }
         }
     }
-    stage('Helm && SonerQube'){
+    stage('Helm'){
         steps{
             container('upkubectl'){
                 sh 'helm version'
