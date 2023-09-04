@@ -7,16 +7,12 @@ pipeline {
         spec:
           containers:
           - name: upkubectl
-            image: 
+            image: alpine:latest
             command:
             - cat
             tty: true
         '''
     }
-  }
-  environment { 
-        master_login = credentials('master_login')
-  }
   stages {
     stage('Pre Test Docker') {
       steps {
@@ -26,33 +22,6 @@ pipeline {
           sh 'pwd'
         }
       }
-    }
-    stage('Installing SSHPASS') {
-      steps {
-        container('upkubectl') {
-          sh 'apk update'
-          sh 'apk search -v -d sshpass'
-          sh 'apk add sshpass'
-        }
-      }
-    }
-    stage('Copying file from local'){
-        steps{
-            container('upkubectl'){
-                sh 'mkdir ~/.kube'
-                sh 'pwd'
-                sh 'sshpass -p $master_login_PSW scp -o StrictHostKeyChecking=no $master_login_USR@34.254.230.9:~/.kube/config ~/.kube/'
-                sh 'ls ~/.kube'
-            }
-        }
-    }
-    stage('Export the config file'){
-        steps{
-            container('upkubectl'){
-                sh 'ls ~/.kube'
-                sh 'export KUBECONFIG=~/.kube/config'
-            }
-        }
     }
     stage('Checking'){
         steps{
