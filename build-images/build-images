@@ -1,0 +1,79 @@
+pipeline {
+  agent {
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        spec:
+          containers:
+          - name: upkubectl
+            image: 
+            command:
+            - cat
+            tty: true
+        '''
+    }
+  }
+  environment { 
+        master_login = credentials('master_login')
+  }
+  stages {
+    stage('Pre Test Docker') {
+      steps {
+        container('upkubectl') {
+          sh 'whoami'
+          sh 'uname -a'
+          sh 'pwd'
+        }
+      }
+    }
+    stage('Installing SSHPASS') {
+      steps {
+        container('upkubectl') {
+          sh 'apk update'
+          sh 'apk search -v -d sshpass'
+          sh 'apk add sshpass'
+        }
+      }
+    }
+    stage('Copying file from local'){
+        steps{
+            container('upkubectl'){
+                sh 'mkdir ~/.kube'
+                sh 'pwd'
+                sh 'sshpass -p $master_login_PSW scp -o StrictHostKeyChecking=no $master_login_USR@34.254.230.9:~/.kube/config ~/.kube/'
+                sh 'ls ~/.kube'
+            }
+        }
+    }
+    stage('Export the config file'){
+        steps{
+            container('upkubectl'){
+                sh 'ls ~/.kube'
+                sh 'export KUBECONFIG=~/.kube/config'
+            }
+        }
+    }
+    stage('Checking'){
+        steps{
+            container('upkubectl'){
+                sh 'kubectl get nodes'
+                sh 'kubectl top nodes'
+                sh 'kubectl get ns'
+                sh 'kubectl get all -n test'
+                sh 'kubectl get sc'
+                sh 'kubectl get pv'
+                sh 'kubectl get pvc -n test'
+            }
+        }
+    }
+    stage('Helm && SonerQube'){
+        steps{
+            container('upkubectl'){
+                sh 'helm version'
+                //sh 'kubectl create namespace sqube'
+            }
+        }
+    }
+  }
+}
