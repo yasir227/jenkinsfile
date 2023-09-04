@@ -13,6 +13,7 @@ pipeline {
             tty: true
         '''
     }
+  }
   stages {
     stage('Pre Test Docker') {
       steps {
