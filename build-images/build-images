@@ -24,24 +24,34 @@ pipeline {
         }
       }
     }
-    stage('Checking'){
+    stage('Checking utilities'){
         steps{
             container('upkubectl'){
-                sh 'kubectl get nodes'
-                sh 'kubectl top nodes'
-                sh 'kubectl get ns'
-                sh 'kubectl get all -n test'
-                sh 'kubectl get sc'
-                sh 'kubectl get pv'
-                sh 'kubectl get pvc -n test'
+                sh 'apk add --update --no-cache \
+                    ca-certificates \
+                    make \
+                    bash \
+                    curl \
+                    unzip \
+                    zip \
+                    git \
+                    python3 \
+                    python3-dev \
+                    py-pip \
+                    build-base \
+                    openssh-client \
+                    stunnel \
+                    tzdata \
+                    coreutils'   
             }
         }
     }
-    stage('Helm'){
+    stage('Installing kubectl'){
         steps{
             container('upkubectl'){
-                sh 'helm version'
-                //sh 'kubectl create namespace sqube'
+                sh 'install curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl'
+                sh 'install chmod +x ./kubectl'
+                sh 'install mv ./kubectl /usr/local/bin'
             }
         }
     }
