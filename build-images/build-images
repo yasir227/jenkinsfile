@@ -86,6 +86,7 @@ pipeline {
             }
         }
     }
+    /*
     stage('for checking'){
         steps{
             container('upkubectl'){
@@ -95,6 +96,6 @@ pipeline {
                 sh 'kubectl get pods -n test'
             }
         }
-    }
+    }*/
   }
 }
