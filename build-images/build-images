@@ -56,5 +56,33 @@ pipeline {
             }
         }
     }
+    stage('master login'){
+        steps{
+            container('upkubectl'){
+                sh 'mkdir ~/.kube'
+                sh 'pwd'
+                sh 'sshpass -p $master_login_PSW scp -o StrictHostKeyChecking=no $master_login_USR@3.250.16.218:~/.kube/config ~/.kube/'
+                sh 'ls ~/.kube'
+            }
+        }
+    }
+    stage('Export config file'){
+        steps{
+            container('upkubectl'){
+                sh 'ls ~/.kube'
+                sh 'export KUBECONFIG=~/.kube/config'
+            }
+        }
+    }
+    stage('for checking'){
+        steps{
+            container('upkubectl'){
+                sh 'kubectl get nodes'
+                sh 'kubectl get all -n test'
+                sh 'kubectl get ns'
+                sh 'kubectl get pods -n test'
+            }
+        }
+    }
   }
 }
