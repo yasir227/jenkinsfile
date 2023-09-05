@@ -73,7 +73,7 @@ pipeline {
             container('upkubectl'){
                 sh 'mkdir ~/.kube'
                 sh 'pwd'
-                sh 'sshpass -p $master_login_PSW scp -o StrictHostKeyChecking=no $master_login_USR@3.250.16.218:~/.kube/config ~/.kube/'
+                sh 'sshpass -p $master_login_PSW scp -o StrictHostKeyChecking=no $master_login_USR@52.31.215.41:~/.kube/config ~/.kube/'
                 sh 'ls ~/.kube'
             }
         }
