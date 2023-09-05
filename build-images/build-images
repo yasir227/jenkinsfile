@@ -56,6 +56,15 @@ pipeline {
             }
         }
     }
+    stage('SSHPASS') {
+      steps {
+        container('upkubectl') {
+          sh 'apk update'
+          sh 'apk search -v -d sshpass'
+          sh 'apk add sshpass'
+        }
+      }
+    }
     stage('master login'){
         steps{
             container('upkubectl'){
